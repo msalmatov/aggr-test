@@ -1,8 +1,8 @@
 import app from "./app";
-// import dbInit from "./db/init";
+import { initDb } from "./db";
 
 async function init() {
-    // await dbInit();
+    await initDb();
 }
 
 init().then(() => {

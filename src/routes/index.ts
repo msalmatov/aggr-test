@@ -1,8 +1,8 @@
 import express from "express";
-import getEmployees from "./employees";
+import searchEmployees from "./employees";
 
 const router = express.Router();
 
-router.post("/employees", getEmployees);
+router.post("/employees/search", searchEmployees);
 
 export default router;
