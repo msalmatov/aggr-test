@@ -11,9 +11,6 @@ export default async function searchEmployees(req: Request, res: Response, next:
             result: data
         });
     } catch (err) {
-        return next({
-            error: err.message,
-            result: null
-        });
+        return next(err.message);
     }
 }
