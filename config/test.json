@@ -3,6 +3,6 @@
     "port": 4000
   },
   "database": {
-    "uri": "mongodb://localhost:27017/test-mongo"
+    "uri": "mongodb://localhost:27017/testdb"
   }
 }
