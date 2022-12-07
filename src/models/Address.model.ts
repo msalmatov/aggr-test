@@ -4,7 +4,7 @@ import { Employee } from "./Employee.model";
 @modelOptions({ schemaOptions: { collection: "addresses" } })
 class Address {
     @prop({ ref: () => Employee, index: 1 })
-    public employeeId!: Ref<Employee>
+    public employeeId!: Ref<Employee>;
 
     @prop({ required: true })
     public address!: string;

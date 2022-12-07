@@ -1,6 +1,5 @@
 import app from "../src/app";
-import { initDb } from "../src/db";
-import mongoose from "mongoose";
+import { closeDb, initDb } from "../src/db";
 import { EmployeeModel } from "../src/models/Employee.model";
 import { AddressModel } from "../src/models/Address.model";
 
@@ -70,17 +69,18 @@ class Seeder {
                 employeeId: Seeder.empId4,
                 address: "Бухара"
             }
-        ])
+        ]);
     }
 }
 
 describe("App", function () {
+
     beforeAll(async function () {
         await initDb();
     });
 
     afterAll(async function () {
-        await mongoose.disconnect();
+        await closeDb();
     });
 
     beforeEach(async function () {
@@ -91,12 +91,14 @@ describe("App", function () {
     });
 
     describe("search", function () {
+
         const req = async (data: Record<string, any>) => {
             return request
                 .post('/employees/search')
                 .set('Accept', 'application/json')
                 .send(data);
         }
+
         it("should return employees with valid params", async function () {
             const res = await req({
                 search: "на Афа ди"
@@ -105,7 +107,6 @@ describe("App", function () {
             expect(res.status).toEqual(200);
             expect(res.body).toBeDefined();
             expect(res.body.error).toBeNull();
-
             expect(res.body.result).toEqual([
                 expect.objectContaining({
                     _id: Seeder.empId3,

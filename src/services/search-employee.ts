@@ -29,22 +29,20 @@ export default class SearchEmployeeService {
             $sort: { fullName: 1 }
         });
 
-        aggrList.push({
-            $project: {
-                _id: 1,
-                fullName: 1,
-                department: 1,
-                position: 1,
-                address: { $arrayElemAt: ['$addresses.address', 0] }
-            }
-        });
+        // aggrList.push({
+        //     $project: {
+        //         _id: 1,
+        //         fullName: 1,
+        //         department: 1,
+        //         position: 1,
+        //         address: { $arrayElemAt: ['$addresses.address', 0] }
+        //     }
+        // });
 
         return EmployeeModel.aggregate(aggrList);
     }
 
     public getSearchRegExpList(searchString: string) {
-        // return new RegExp(Array.from(new Set(searchString.toLowerCase().split(/\s+/))).join('|'), 'i');
-        const words = Array.from(new Set(searchString.toLowerCase().split(/\s+/)));
-        return words.map(w => new RegExp(w, "i"));
+        return Array.from(new Set(searchString.toLowerCase().split(/\s+/))).map(w => new RegExp(w, "i"));
     }
 }
