@@ -6,7 +6,6 @@ export default async function searchEmployees(req: Request, res: Response, next:
         const searchString = req.body.search;
         const searcher = new SearchEmployeeService();
         const data = await searcher.search(searchString);
-        console.log(data);
         return res.status(200).send({
             error: null,
             result: data

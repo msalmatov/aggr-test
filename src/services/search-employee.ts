@@ -2,50 +2,49 @@ import { EmployeeModel } from "../models/Employee.model";
 
 export default class SearchEmployeeService {
     public search(searchString: string) {
-        const search = this.getSearchRegExp(searchString);
-        console.log("111:", search);
-        return EmployeeModel.aggregate([
-            {
-                $lookup: {
-                    from: "addresses",
-                    localField: "_id",
-                    foreignField: "employeeId",
-                    as: "addresses"
-                }
-            },
-            {
+        const reList = this.getSearchRegExpList(searchString);
+
+        const aggrList: any = [{
+            $lookup: {
+                from: "addresses",
+                localField: "_id",
+                foreignField: "employeeId",
+                as: "addresses"
+            }
+        }];
+
+        reList.forEach(re => {
+            aggrList.push({
                 $match: {
                     $or: [
-                        {
-                            fullName: search
-                        },
-                        {
-                            position: search
-                        },
-                        {
-                            "addresses.address": search
-                        }
+                        { fullName: re },
+                        { position: re },
+                        { "addresses.address": re }
                     ]
                 }
-            },
-            {
-                $sort: {
-                    fullName: 1
-                }
-            },
-            // {
-            //     $project: {
-            //         _id: 1,
-            //         fullName: 1,
-            //         department: 1,
-            //         position: 1,
-            //         address: { $arrayElemAt: [ '$addresses.address', 0 ] }
-            //     }
-            // }
-        ]);
+            });
+        });
+
+        aggrList.push({
+            $sort: { fullName: 1 }
+        });
+
+        aggrList.push({
+            $project: {
+                _id: 1,
+                fullName: 1,
+                department: 1,
+                position: 1,
+                address: { $arrayElemAt: ['$addresses.address', 0] }
+            }
+        });
+
+        return EmployeeModel.aggregate(aggrList);
     }
 
-    private getSearchRegExp(searchString: string) {
-        return new RegExp(Array.from(new Set(searchString.toLowerCase().split(/\s+/))).join('|'), 'i');
+    private getSearchRegExpList(searchString: string) {
+        // return new RegExp(Array.from(new Set(searchString.toLowerCase().split(/\s+/))).join('|'), 'i');
+        const words = Array.from(new Set(searchString.toLowerCase().split(/\s+/)));
+        return words.map(w => new RegExp(w, "i"));
     }
 }
