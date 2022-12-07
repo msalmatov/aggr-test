@@ -7,5 +7,5 @@ export default function errorHandler(err: any, req: Request, res: Response, next
         res.status(err.status);
     }
 
-    res.send({ errors: err });
+    res.send({ error: err });
 }

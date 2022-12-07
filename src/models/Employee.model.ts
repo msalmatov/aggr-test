@@ -2,7 +2,7 @@ import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 
 @modelOptions({ schemaOptions: { collection: "employees" } })
 class Employee {
-    @prop({ required: true })
+    @prop({ required: true, index: 1 })
     public fullName!: string;
 
     @prop({ required: true })

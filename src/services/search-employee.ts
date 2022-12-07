@@ -42,7 +42,7 @@ export default class SearchEmployeeService {
         return EmployeeModel.aggregate(aggrList);
     }
 
-    private getSearchRegExpList(searchString: string) {
+    public getSearchRegExpList(searchString: string) {
         // return new RegExp(Array.from(new Set(searchString.toLowerCase().split(/\s+/))).join('|'), 'i');
         const words = Array.from(new Set(searchString.toLowerCase().split(/\s+/)));
         return words.map(w => new RegExp(w, "i"));
